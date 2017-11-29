@@ -34,7 +34,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
     $router->get('/', 'PhotoController@index');
     $router->get('/getAllCollection[/{colKey}]', 'PhotoController@getCollectionsList');
-    $router->get('/photos/{coll_id}', 'PhotoController@getCollectionPhotos');
+    $router->get('/getAlbumInfo/{albumKey}', 'PhotoController@getAlbumPhotos');
 
     $router->get('/neelCreate', 'UserController@setupNeelForm');
     $router->post('/neelCreate', 'UserController@setupNeel');

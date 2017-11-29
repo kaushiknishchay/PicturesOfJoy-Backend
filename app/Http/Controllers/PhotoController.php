@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PhotoCollection;
+use App\Photos;
 use Illuminate\Http\Request;
 
 class PhotoController extends Controller {
@@ -40,10 +41,14 @@ class PhotoController extends Controller {
         }
     }
 
-    public function getCollectionPhotos($coll_id)
+    public function getAlbumPhotos($albumKey)
     {
-        $photos = PhotoCollection::find($coll_id);
-        return response()->json($photos->photos);
+        if ($albumKey != null && $albumKey != "" && strlen($albumKey) >= 3) {
+
+            $photos = Photos::where('albumkey', $albumKey)->select('name', 'description', 'thumb_url', 'photo_url')->first();
+            return response()->json($photos);
+        } else {
+            return response()->json(["success" => false], 500);
+        }
     }
-    //
 }

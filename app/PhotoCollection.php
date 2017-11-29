@@ -37,7 +37,7 @@ class PhotoCollection extends Model {
 
     public function getAlbumsAttribute()
     {
-        return $this->collectionAlbums()->select('name', 'description', 'thumb_url', 'photo_url')->get();
+        return $this->collectionAlbums()->select('name', 'albumkey', 'thumb_url')->get();
     }
 
 }

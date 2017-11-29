@@ -21,8 +21,15 @@ use Illuminate\Database\Eloquent\Model;
 class Photos extends Model {
     public $timestamps = true;
     public $table = "photos";
+    protected $appends = array('slug');
 
-    public function collection(){
-        return $this->belongsTo('App\PhotoCollection','collection_id','id');
+    public function getSlugAttribute()
+    {
+        return str_slug($this->name);
+    }
+
+    public function collection()
+    {
+        return $this->belongsTo('App\PhotoCollection', 'collection_id', 'id');
     }
 }

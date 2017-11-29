@@ -212,22 +212,29 @@ class AdminController extends Controller {
             $editAlbum->name = $albumName;
             $editAlbum->description = $albumDesc;
             $editAlbum->collection_id = $collectionId;
-
+            $newPhotos = array();
             if ($request->hasFile('albumFiles')) {
                 $albumFiles = $request->file("albumFiles");
                 $v = array();
                 foreach ($albumFiles as $file) {
                     $fName = uniqid() . ".jpg";
                     $v = array_prepend($v, $photosPath . $fName);
-
                     $file->move($photosPath, $fName);
                 }
-                $editAlbum->photo_url = json_encode($v);
-            } else {
-                if ($photoUpdate) {
-                    $editAlbum->photo_url = $photoUpdate;
-                }
+                $newPhotos = array_merge($newPhotos, $v);
+//                print_r('newPhotos1');
+//                print_r($newPhotos);
+//                $editAlbum->photo_url = json_encode($v);
             }
+            if ($photoUpdate) {  //removing some photo
+                $newPhotos = array_merge($newPhotos, json_decode($photoUpdate));
+//                $editAlbum->photo_url = $photoUpdate;
+            } else { //only new  photo added
+                $newPhotos = array_merge($newPhotos, json_decode($editAlbum->photo_url));
+            }
+
+            $editAlbum->photo_url = json_encode($newPhotos);
+
             if ($request->hasFile('albumCover')) {
 
                 $albumCover = $request->file("albumCover");
@@ -240,7 +247,7 @@ class AdminController extends Controller {
             }
 
             if ($editAlbum->save()) {
-                return response()->json(["success" => true, "aa" => $photoUpdate], 200);
+                return response()->json(["success" => true, "bb" => json_encode($newPhotos)], 200);
             } else {
                 return response()->json(["success" => false], 200);
             }

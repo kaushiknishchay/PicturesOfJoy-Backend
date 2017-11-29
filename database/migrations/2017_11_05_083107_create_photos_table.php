@@ -20,7 +20,7 @@ class CreatePhotosTable extends Migration
             $table->string("collection_id")->foreign()->references('id')->on('collection');
             $table->string("thumb_url");
             $table->string("albumkey")->unique();
-            $table->string("photo_url");
+            $table->text("photo_url");
             $table->string("photo_date");
             $table->timestamps();
         });

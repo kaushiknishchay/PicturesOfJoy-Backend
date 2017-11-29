@@ -72,12 +72,11 @@ class UserController extends Controller {
             'password' => 'required'
         ]);
 
-        $userName = $request->json()->get('username');
+        $userName = $request->input('username');
         $passWord = $request->input('password');
-
         $user = User::where('username', $userName)->first();
 
-        if ($user != null && Hash::check($passWord, Hash::make($user->password))) {
+        if ($user != null && Hash::check($passWord, $user->password)) {
             $apikey = base64_encode(str_random(40));
             User::where('username', $userName)->update(['api_key' => "$apikey"]);;
             return response()->json(['code' => 200, 'status' => 'success', 'api_key' => $apikey]);
