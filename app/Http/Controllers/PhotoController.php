@@ -41,6 +41,18 @@ class PhotoController extends Controller {
         }
     }
 
+    public function getRandomWorks($count)
+    {
+        $allAlbums = Photos::select('photo_url')->get()->toArray();
+        $photos = array();
+        foreach ($allAlbums as $album) {
+            unset($album['slug']);
+            $photos = array_merge_recursive($photos, json_decode($album['photo_url']));
+        }
+        shuffle($photos);
+        return response()->json(array_slice($photos, 0, $count));
+    }
+
     public function getAlbumPhotos($albumKey)
     {
         if ($albumKey != null && $albumKey != "" && strlen($albumKey) >= 3) {
